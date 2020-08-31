@@ -159,14 +159,16 @@ export default {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: this.encode({
           "form-name": "student-detail",
-          ...this.form,
+          ...this.student,
         }),
       })
-        .then(() => {
-          this.$router.push("thanks");
+        .then((a) => {
+          // this.$router.push("thanks");
+          console.log('success',a);
         })
-        .catch(() => {
-          this.$router.push("404");
+        .catch((err) => {
+          // this.$router.push("404");
+          console.log('fail',err);
         });
     },
   },
