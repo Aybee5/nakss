@@ -1,7 +1,7 @@
 <template>
-  <v-container>
+  <v-container class="ml-4">
     <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs12 sm6 offset-sm1>
         <h4>Student's ID Card detail</h4>
       </v-flex>
     </v-layout>
@@ -16,14 +16,14 @@
         >
           <input type="hidden" name="form-name" value="student-detail" />
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
                 <v-text-field v-model="student.name" name="name" label="Full Name" required></v-text-field>
               </v-col>
             </v-flex>
           </v-layout>
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
                 <v-text-field
                   type="tel"
@@ -38,7 +38,7 @@
             </v-flex>
           </v-layout>
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
                 <v-text-field
                   v-model="student.regNum"
@@ -52,7 +52,7 @@
             </v-flex>
           </v-layout>
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
                 <v-text-field
                   v-model="student.faculty"
@@ -64,14 +64,14 @@
             </v-flex>
           </v-layout>
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
                 <v-text-field v-model="student.dept" name="dept" label="Department" required></v-text-field>
               </v-col>
             </v-flex>
           </v-layout>
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" sm="12" lg="6">
                 <v-select
                   :items="['100','200','300', '400', '500']"
@@ -85,7 +85,7 @@
             </v-flex>
           </v-layout>
           <v-layout row>
-            <v-flex xs12 sm6 offset-sm3>
+            <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" sm="12" lg="6">
                 <v-file-input
                   v-model="student.img"
@@ -103,17 +103,16 @@
             </v-flex>
           </v-layout>
           <v-layout row>
-            <v-flex xs12 md6 offset-sm3>
+            <v-flex xs12 md6 offset-sm1>
               <v-col>
-                <v-btn color="success" type="submit" class="mx-2">Make Payment</v-btn>
+                <v-btn color="primary" @click="makePayment">Make Payment(N300)</v-btn>
               </v-col>
             </v-flex>
           </v-layout>
           <v-layout row>
-            <v-flex xs12 md6 offset-sm3>
+            <v-flex xs12 md6 offset-sm1>
               <v-col>
-                <v-btn color="success" type="submit" class="mx-2">Save Task</v-btn>
-                <v-btn color="warning" @click="seeFile">Cancel</v-btn>
+                <v-btn color="success" type="submit">Submit</v-btn>
                 <pre>
                   {{student}}
                 </pre>
@@ -125,6 +124,7 @@
     </v-layout>
   </v-container>
 </template>
+          <script src="https://checkout.flutterwave.com/v3.js"></script>
 
 <script>
 export default {
@@ -145,6 +145,29 @@ export default {
     seeFile() {
       console.log(this.student.img);
     },
+    makePayment() {
+      FlutterwaveCheckout({
+        public_key: "FLWPUBK_TEST-31d61a13026483fc38f15f0e90232374-X",
+        tx_ref: "hooli-tx-1920bbtyt",
+        amount: 54600,
+        currency: "NGN",
+        payment_options: "card,mobilemoney,ussd",
+        customer: {
+          email: "user@gmail.com",
+          phonenumber: "08102909304",
+          name: "yemi desola",
+        },
+        callback: function (data) {
+          // specified callback function
+          console.log(data);
+        },
+        customizations: {
+          title: "My store",
+          description: "Payment for items in cart",
+          logo: "https://assets.piedpiper.com/logo.png",
+        },
+      })
+    },
     encode(data) {
       return Object.keys(data)
         .map(
@@ -164,11 +187,11 @@ export default {
       })
         .then((a) => {
           // this.$router.push("thanks");
-          console.log('success',a);
+          console.log("success", a);
         })
         .catch((err) => {
           // this.$router.push("404");
-          console.log('fail',err);
+          console.log("fail", err);
         });
     },
   },
