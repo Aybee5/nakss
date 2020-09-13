@@ -11,6 +11,7 @@
           @submit.prevent="handleSubmit"
           name="student-detail"
           method="post"
+          enctype="multipart/form-data"
           data-netlify="true"
           data-netlify-honeypot="bot-field"
         >
@@ -184,7 +185,7 @@ export default {
       console.log(e);
       fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "multipart/form-data" },
+        // headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: this.encode({
           "form-name": "student-detail",
           ...this.student,
