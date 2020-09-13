@@ -14,7 +14,12 @@
           data-netlify="true"
           data-netlify-honeypot="bot-field"
         >
+        <!-- <form @submit.prevent="submitForm" enctype="multipart/form-data" action="https://api.staticforms.xyz/submit" method="post"> -->
           <input type="hidden" name="form-name" value="student-detail" />
+          <!-- <input type="hidden" name="accessKey" value="230f7536-36df-4a36-81ad-c30cefc0b7eb">
+          <input type="hidden" name="subject" value="New Detail"> -->
+        <!-- Replace with the url you want to redirect to -->
+          <!-- <input type="hidden" name="redirectTo" value="/about"> -->
           <v-layout row>
             <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
@@ -66,7 +71,7 @@
           <v-layout row>
             <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
-                <v-text-field v-model="student.dept" name="dept" label="Department" required></v-text-field>
+                <v-text-field v-model="student.dept" name="$depts" label="Department" required></v-text-field>
               </v-col>
             </v-flex>
           </v-layout>
@@ -91,9 +96,10 @@
                   v-model="student.img"
                   accept="image/*"
                   name="passport"
+                  @change="seeFile"
                   placeholder="Upload your ID size photo"
                   label="Passport"
-                  prepend-icon="mdi-paperclip"
+                  prepend-icon="mdi-camera"
                 >
                   <template v-slot:selection="{ text }">
                     <v-chip small label color="primary">{{ text }}</v-chip>
@@ -105,7 +111,7 @@
           <v-layout row>
             <v-flex xs12 md6 offset-sm1>
               <v-col>
-                <v-btn color="primary" @click="makePayment">Make Payment(N300)</v-btn>
+                <v-btn color="primary">Make Payment(N300)</v-btn>
               </v-col>
             </v-flex>
           </v-layout>
@@ -124,7 +130,6 @@
     </v-layout>
   </v-container>
 </template>
-          <script src="https://checkout.flutterwave.com/v3.js"></script>
 
 <script>
 export default {
@@ -142,8 +147,8 @@ export default {
     };
   },
   methods: {
-    seeFile() {
-      console.log(this.student.img);
+    seeFile(file) {
+      console.log(file);
     },
     makePayment() {
       FlutterwaveCheckout({
@@ -179,7 +184,7 @@ export default {
       console.log(e);
       fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { "Content-Type": "multipart/form-data" },
         body: this.encode({
           "form-name": "student-detail",
           ...this.student,
