@@ -26,7 +26,7 @@
         class=""
         cols="12"
       >
-        <v-btn color="success" to="/form"> Fill Detail </v-btn>
+        <v-btn color="success" to="/payment"> Fill Detail </v-btn>
       </v-col>
 
       <v-col

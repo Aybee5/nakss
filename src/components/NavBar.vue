@@ -1,12 +1,12 @@
 <template>
   <div>
     <v-app-bar app>
-      <v-toolbar-title to="/welcome">NAKSS-BUK</v-toolbar-title>
+      <v-toolbar-title>NAKSS-BUK</v-toolbar-title>
       <v-toolbar-items>
         <v-btn depressed to="/about">
           About
         </v-btn>
-        <v-btn depressed to="/form">
+        <v-btn depressed to="/payment">
           Form
         </v-btn>
       </v-toolbar-items>

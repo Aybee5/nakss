@@ -7,20 +7,23 @@
     </v-layout>
     <v-layout row>
       <v-flex xs12>
-        <form
+        <!-- <form
           @submit.prevent="handleSubmit"
           name="student-detail"
           method="post"
           enctype="multipart/form-data"
           data-netlify="true"
           data-netlify-honeypot="bot-field"
-        >
+        > -->
         <!-- <form @submit.prevent="submitForm" enctype="multipart/form-data" action="https://api.staticforms.xyz/submit" method="post"> -->
-          <input type="hidden" name="form-name" value="student-detail" />
+          <!-- <input type="hidden" name="form-name" value="student-detail" /> -->
           <!-- <input type="hidden" name="accessKey" value="230f7536-36df-4a36-81ad-c30cefc0b7eb">
           <input type="hidden" name="subject" value="New Detail"> -->
         <!-- Replace with the url you want to redirect to -->
           <!-- <input type="hidden" name="redirectTo" value="/about"> -->
+          <form @submit.prevent="submitThis" id="formDetail" enctype="multipart/form-data" method="post">
+          <input type="hidden" name="ref" :value="this.$route.query.tx_ref">
+          <input type="hidden" name="trans_id" :value="this.$route.query.transaction_id">
           <v-layout row>
             <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
@@ -72,7 +75,7 @@
           <v-layout row>
             <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
-                <v-text-field v-model="student.dept" name="$depts" label="Department" required></v-text-field>
+                <v-text-field v-model="student.dept" name="dept" label="Department" required></v-text-field>
               </v-col>
             </v-flex>
           </v-layout>
@@ -112,14 +115,7 @@
           <v-layout row>
             <v-flex xs12 md6 offset-sm1>
               <v-col>
-                <v-btn color="primary">Make Payment(N300)</v-btn>
-              </v-col>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex xs12 md6 offset-sm1>
-              <v-col>
-                <v-btn color="success" type="submit">Submit</v-btn>
+                <v-btn color="success" type="submit" :disabled="checkPayment">Submit</v-btn>
                 <pre>
                   {{student}}
                 </pre>
@@ -149,30 +145,8 @@ export default {
   },
   methods: {
     seeFile(file) {
+      console.log(this.checkPayment);
       console.log(file);
-    },
-    makePayment() {
-      FlutterwaveCheckout({
-        public_key: "FLWPUBK_TEST-31d61a13026483fc38f15f0e90232374-X",
-        tx_ref: "hooli-tx-1920bbtyt",
-        amount: 54600,
-        currency: "NGN",
-        payment_options: "card,mobilemoney,ussd",
-        customer: {
-          email: "user@gmail.com",
-          phonenumber: "08102909304",
-          name: "yemi desola",
-        },
-        callback: function (data) {
-          // specified callback function
-          console.log(data);
-        },
-        customizations: {
-          title: "My store",
-          description: "Payment for items in cart",
-          logo: "https://assets.piedpiper.com/logo.png",
-        },
-      })
     },
     encode(data) {
       return Object.keys(data)
@@ -180,6 +154,16 @@ export default {
           (key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
         )
         .join("&");
+    },
+    submitThis() {
+      fetch('https://fast-temple-47704.herokuapp.com/submit',{
+        body: new FormData(document.getElementById('formDetail')),
+        method: "post"
+      }).then(res=> {
+        console.log(res)
+      }).catch(err=>{
+        console.log(err);
+      })
     },
     handleSubmit(e) {
       console.log(e);
@@ -201,6 +185,11 @@ export default {
         });
     },
   },
+  computed: {
+    checkPayment() {
+      return this.$route.query.status === 'completed' ? false : true
+    }
+  }
 };
 </script>
 
