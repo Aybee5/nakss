@@ -1,2 +1,5 @@
 /form  /index.html 200
 /error  /index.html 200
+/payment /index.html 200
+/success /index.html 200
+/about	/index.html 200

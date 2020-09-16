@@ -151,7 +151,7 @@ export default {
   methods: {
     submitThis() {
       console.log("submitting");
-      // this.loading = true;
+      this.loading = true;
       if (!this.$route.query.tx_ref && !this.$route.query.transaction_id) {
         this.$router.replace("/payment");
       } else {
