@@ -7,7 +7,7 @@
           About
         </v-btn>
         <v-btn depressed to="/payment">
-          Form
+          Payment
         </v-btn>
       </v-toolbar-items>
     </v-app-bar>

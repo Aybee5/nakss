@@ -18,6 +18,22 @@ Vue.use(VueRouter)
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
+    path: '/success',
+    name: 'Success',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../components/Success.vue')
+  },
+  {
+    path: '/error',
+    name: 'Error',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../components/Error.vue')
+  },
+  {
     path: '/form',
     name: 'Form',
     // route level code-splitting
