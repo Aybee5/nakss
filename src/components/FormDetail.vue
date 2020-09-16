@@ -2,28 +2,28 @@
   <v-container class="ml-4">
     <v-layout row>
       <v-flex xs12 sm6 offset-sm1>
+        <h3>Make sure you submit this form before closing your browser</h3>
+        <p>
+          If you have any issue regarding send a mail to
+          <a href="mailto:ibrahiimaa05@gmail.com">ibrahiimaa05@gmail.com</a>
+          or call
+          <a href="tel:+2348139349336">08139349336</a>with reference number:
+          <b>{{this.$route.query.tx_ref}}</b> and a transaction_id:
+          <b>{{this.$route.query.transaction_id}}</b>
+        </p>
         <h4>Student's ID Card detail</h4>
       </v-flex>
     </v-layout>
     <v-layout row>
       <v-flex xs12>
-        <!-- <form
-          @submit.prevent="handleSubmit"
-          name="student-detail"
-          method="post"
+        <form
+          @submit.prevent="submitThis"
+          id="formDetail"
           enctype="multipart/form-data"
-          data-netlify="true"
-          data-netlify-honeypot="bot-field"
-        > -->
-        <!-- <form @submit.prevent="submitForm" enctype="multipart/form-data" action="https://api.staticforms.xyz/submit" method="post"> -->
-          <!-- <input type="hidden" name="form-name" value="student-detail" /> -->
-          <!-- <input type="hidden" name="accessKey" value="230f7536-36df-4a36-81ad-c30cefc0b7eb">
-          <input type="hidden" name="subject" value="New Detail"> -->
-        <!-- Replace with the url you want to redirect to -->
-          <!-- <input type="hidden" name="redirectTo" value="/about"> -->
-          <form @submit.prevent="submitThis" id="formDetail" enctype="multipart/form-data" method="post">
-          <input type="hidden" name="ref" :value="this.$route.query.tx_ref">
-          <input type="hidden" name="trans_id" :value="this.$route.query.transaction_id">
+          method="post"
+        >
+          <input type="hidden" name="ref" :value="this.$route.query.tx_ref" />
+          <input type="hidden" name="trans_id" :value="this.$route.query.transaction_id" />
           <v-layout row>
             <v-flex xs12 sm6 offset-sm1>
               <v-col cols="11" lg="12" sm="12">
@@ -100,7 +100,6 @@
                   v-model="student.img"
                   accept="image/*"
                   name="passport"
-                  @change="seeFile"
                   placeholder="Upload your ID size photo"
                   label="Passport"
                   prepend-icon="mdi-camera"
@@ -125,6 +124,9 @@
         </form>
       </v-flex>
     </v-layout>
+    <v-overlay :value="loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-container>
 </template>
 
@@ -141,55 +143,38 @@ export default {
         level: null,
         img: [],
       },
+      loading: false,
     };
   },
   methods: {
-    seeFile(file) {
-      console.log(this.checkPayment);
-      console.log(file);
-    },
-    encode(data) {
-      return Object.keys(data)
-        .map(
-          (key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
-        )
-        .join("&");
-    },
     submitThis() {
-      fetch('https://fast-temple-47704.herokuapp.com/submit',{
-        body: new FormData(document.getElementById('formDetail')),
-        method: "post"
-      }).then(res=> {
-        console.log(res)
-      }).catch(err=>{
-        console.log(err);
-      })
-    },
-    handleSubmit(e) {
-      console.log(e);
-      fetch("/", {
-        method: "POST",
-        // headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: this.encode({
-          "form-name": "student-detail",
-          ...this.student,
-        }),
-      })
-        .then((a) => {
-          // this.$router.push("thanks");
-          console.log("success", a);
+      this.loading = true;
+      if (!this.$route.query.tx_ref && !this.$route.query.transaction_id){
+        this.$router.replace("/payment");
+      }
+      else{
+        fetch("https://fast-temple-47704.herokuapp.com/submit", {
+          body: new FormData(document.getElementById("formDetail")),
+          method: "post",
         })
-        .catch((err) => {
-          // this.$router.push("404");
-          console.log("fail", err);
-        });
+          .then((res) => {
+            this.$router.replace("/success");
+          })
+          .catch((err) => {
+            this.$router.replace("/error");
+          });
+      }
     },
   },
   computed: {
     checkPayment() {
-      return this.$route.query.status === 'completed' ? false : true
-    }
-  }
+      return this.$route.query.status === "completed" ? false : true;
+    },
+  },
+  mounted() {
+    localStorage.setItem("refKey", this.$route.query.tx_ref);
+    localStorage.setItem("transId", this.$route.query.transaction_id);
+  },
 };
 </script>
 
