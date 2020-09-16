@@ -5,7 +5,9 @@
         <h3>Make sure you submit this form before closing your browser</h3>
         <p>
           If you have any issue regarding send a mail to
-          <a href="mailto:ibrahiimaa05@gmail.com">ibrahiimaa05@gmail.com</a>
+          <a
+            href="mailto:ibrahiimaa05@gmail.com"
+          >ibrahiimaa05@gmail.com</a>
           or call
           <a href="tel:+2348139349336">08139349336</a>with reference number:
           <b>{{this.$route.query.tx_ref}}</b> and a transaction_id:
@@ -148,21 +150,33 @@ export default {
   },
   methods: {
     submitThis() {
-      this.loading = true;
-      if (!this.$route.query.tx_ref && !this.$route.query.transaction_id){
+      console.log("submitting");
+      // this.loading = true;
+      if (!this.$route.query.tx_ref && !this.$route.query.transaction_id) {
         this.$router.replace("/payment");
-      }
-      else{
+      } else {
+        // https://fast-temple-47704.herokuapp.com
         fetch("https://fast-temple-47704.herokuapp.com/submit", {
           body: new FormData(document.getElementById("formDetail")),
           method: "post",
         })
           .then((res) => {
-            this.$router.replace("/success");
+            return res.json();
           })
-          .catch((err) => {
-            this.$router.replace("/error");
-          });
+          .then((data) => {
+            if (data.msg) {
+              console.log("submit success");
+              this.$router.replace("/success");
+            }
+            else {
+              console.log("else fired", data)
+              // this.$router.replace("/error");
+            }
+          })
+          .catch(err=>{
+            console.log("cache fired", err)
+            // this.$router.replace("/error");
+          })
       }
     },
   },

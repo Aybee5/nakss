@@ -36,6 +36,7 @@ export default {
         currency: "NGN",
         payment_options: "card, account, ussd, banktransfer",
         redirect_url: "https://nakss.netlify.app/form",
+        // redirect_url: "http://localhost:8080/form",
         customer: {
           email: "ibrahiimaa05@gmail.com",
           phonenumber: "08139349336",
