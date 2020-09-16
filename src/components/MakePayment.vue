@@ -22,7 +22,6 @@
           <li>Imran (PRO): +2348139349936</li>
         </ul>
       </v-col>
-    </v-row>
   </v-container>
 </template>
 
@@ -36,11 +35,11 @@ export default {
         amount: 300,
         currency: "NGN",
         payment_options: "card, account, ussd, banktransfer",
-        redirect_url: "http://localhost:8080/form",
+        redirect_url: "https://nakss.netlify.app/form",
         customer: {
-          email: "user@gmail.com",
-          phonenumber: "08102909304",
-          name: "yemi desola",
+          email: "ibrahiimaa05@gmail.com",
+          phonenumber: "08139349336",
+          name: "Ibrahim Abdullahi",
         },
         customizations: {
           title: "NAKSS-BUK",
